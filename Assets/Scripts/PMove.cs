@@ -7,6 +7,7 @@ public class PMove : MonoBehaviour
 {
     [Header("Refs")]
     public Rigidbody player;
+    public Animator anim;
 
     [Header("Movement")]
     public float moveSpeed;
@@ -37,6 +38,8 @@ public class PMove : MonoBehaviour
         player = GetComponent<Rigidbody>();
         isDashing = false;
         CD = false;
+
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -44,6 +47,11 @@ public class PMove : MonoBehaviour
     {
         move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
 
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            anim.SetTrigger("run");
+        else
+            anim.SetTrigger("idle");
+            
         // dash
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && !CD)
         {
@@ -94,4 +102,4 @@ public class PMove : MonoBehaviour
     {
         CD = false;
     }
-}
+ }
