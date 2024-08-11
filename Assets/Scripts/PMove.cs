@@ -19,10 +19,10 @@ public class PMove : MonoBehaviour
     public float acc;
 
     [Header("Speed")]
-    public float speedX;
-    public float speedZ;
+    [SerializeField]private float speedX;
+    [SerializeField]private float speedZ;
 
-    private bool isDashing;
+    public bool isDashing;
     private bool CD;
 
     private Vector3 move;
