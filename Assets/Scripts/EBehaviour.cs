@@ -8,6 +8,7 @@ public class EBehaviour : MonoBehaviour
     public GameObject enemy;
     public Transform enemyPos;
     public Transform playerPos;
+    public HealthBar healthBar;
     public Collider coll;
 
     [Header("Enemy Values")]
@@ -20,11 +21,12 @@ public class EBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        //enemy = GameObject.FindGameObjectWithTag("Enemy");
         coll = GetComponent<Collider>();
 
         enemyPos = GetComponent<Transform>();
         playerPos = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        //healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
 
         currHP = maxHP;
     }
@@ -60,6 +62,9 @@ public class EBehaviour : MonoBehaviour
     public void ETakeDamage(int damage)
     {
         currHP = currHP - damage;
+        healthBar.setHP(currHP);
+
+        Debug.Log(damage);
 
         // play hurt anim for enemy
 

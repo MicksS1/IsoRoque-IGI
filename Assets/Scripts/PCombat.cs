@@ -26,13 +26,14 @@ public class PCombat : MonoBehaviour
     private float nextAtkTime = 0f;
     private float orMoveSpeed;
     private float orRotSpeed;
+    private int count;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         atkPos = GameObject.FindGameObjectWithTag("AttackPosition").GetComponent<Transform>();
-        EBehave = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EBehaviour>();
+        //EBehave = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EBehaviour>();
         pm = GetComponent<PMove>();
         mousePos = GameObject.FindGameObjectWithTag("MouseTarget").GetComponent<Transform>();
         playerPos = GetComponent<Transform>();
@@ -82,9 +83,13 @@ public class PCombat : MonoBehaviour
 
         foreach (Collider enemy in hitEnemies)
         {
-            Debug.Log(enemy.name + " hit");
+            Debug.Log(enemy.name + " hit ");
+            EBehave = enemy.GetComponent<EBehaviour>();
             EBehave.ETakeDamage(atkDamage);
+            //Debug.Log(++count);
         }
+
+        count = 0;
     }
 
     private void OnDrawGizmosSelected()
