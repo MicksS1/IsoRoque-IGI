@@ -11,6 +11,11 @@ public class PCombat : MonoBehaviour
     public PMove pm;
     public Transform mousePos;
     public Transform playerPos;
+    public GameObject weapon;
+
+    [Header("Weapon")]
+    public string weaponName;
+    public Weapon[] weapons = new Weapon[10];
 
     [Header("Atk Values")]
     public float atkRange;
@@ -20,17 +25,36 @@ public class PCombat : MonoBehaviour
 
     public LayerMask enemyLayers;
 
-    [Header("Mouse Position")]
+    //[Header("Mouse Position")]
     //[SerializeField]private Vector3 mousePos;
 
     private float nextAtkTime = 0f;
     private float orMoveSpeed;
     private float orRotSpeed;
-    private int count;
+    //private int count;
+    //private int weaponType;
 
-    // Start is called before the first frame update
+    // cara biar banyak senjata
+    // senjata ntar di taro di tangan smua, tinggal di set active true/false
+    // set true/false berdasarkan data string weaponName
+    // animasi ntar ada smua di 1 controller (player animator) berdasarkan playerpref senjata
+
+    // data atk values bisa jg di simpan di class terpisah
+
+    public class Weapon
+    {
+        public string weaponName;
+        public Transform atkPos;
+        public float atkRange;
+        public int atkDamage;
+        public float atkRate;
+        public float atkDelay;
+    }
+
     void Start()
     {
+        PlayerPrefs.SetString("weaponName", weaponName);
+
         anim = GetComponent<Animator>();
         atkPos = GameObject.FindGameObjectWithTag("AttackPosition").GetComponent<Transform>();
         //EBehave = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EBehaviour>();
@@ -48,18 +72,21 @@ public class PCombat : MonoBehaviour
         if (Time.time >= nextAtkTime)
             if (Input.GetMouseButtonDown(0))
             {
-                attack();
+                attack(weaponName);
                 nextAtkTime = Time.time + 1f / atkRate;
             }
+
+        weaponName = PlayerPrefs.GetString("weaponName");
 
         //mousePos = new Vector3(Input.mousePosition.x, 0f, Input.mousePosition.z);
     }
 
-    void attack()
+    // func attack bisa ditambahin parameter string weapon biar nanti tinggal anim.SetTrigger(weapon)
+    void attack(string weapon)
     {
         // play atk anim
-        anim.SetTrigger("atk");
-        Invoke("attackTiming", atkDelay);
+        anim.SetTrigger("atk" + weapon);
+        Invoke("attackHit", atkDelay);
 
         // slow down character when attacking
         pm.moveSpeed = pm.moveSpeed * 0.05f;
@@ -76,7 +103,7 @@ public class PCombat : MonoBehaviour
         transform.rotation = targetRotation;
     }
 
-    void attackTiming()
+    void attackHit()
     {
         Collider[] hitEnemies;
         hitEnemies = Physics.OverlapSphere(atkPos.position, atkRange, enemyLayers);
@@ -89,7 +116,7 @@ public class PCombat : MonoBehaviour
             //Debug.Log(++count);
         }
 
-        count = 0;
+        //count = 0;
     }
 
     private void OnDrawGizmosSelected()

@@ -9,11 +9,14 @@ TagManager:
   - MouseTarget
   - HealthBar
   - HPnumber
+  - Machete
+  - Katana
+  - Weapons
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Enemy
