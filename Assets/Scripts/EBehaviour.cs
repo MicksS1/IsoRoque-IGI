@@ -9,7 +9,7 @@ public class EBehaviour : MonoBehaviour
     public Transform enemyPos;
     public Transform playerPos;
     public HealthBar healthBar;
-    public Collider coll;
+    //public Collider coll;
 
     [Header("Enemy Values")]
     public int maxHP = 100;
@@ -22,7 +22,7 @@ public class EBehaviour : MonoBehaviour
     void Start()
     {
         //enemy = GameObject.FindGameObjectWithTag("Enemy");
-        coll = GetComponent<Collider>();
+        //coll = GetComponent<Collider>();
 
         enemyPos = GetComponent<Transform>();
         playerPos = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();

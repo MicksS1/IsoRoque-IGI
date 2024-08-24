@@ -13,7 +13,7 @@ public class WeaponBehaviour : MonoBehaviour
         pc = GameObject.FindGameObjectWithTag("Player").GetComponent<PCombat>();
         weaponPar = this.gameObject;
 
-        pc.weapon = GameObject.FindGameObjectWithTag(pc.weaponName);
+        pc.weaponObject = GameObject.FindGameObjectWithTag(pc.weaponName);
         
         foreach (Transform weapons in weaponPar.transform)
             if (weapons.tag != pc.weaponName)
@@ -31,7 +31,7 @@ public class WeaponBehaviour : MonoBehaviour
         foreach (Transform weapons in weaponPar.transform)
             weapons.gameObject.SetActive(true);
 
-        pc.weapon = GameObject.FindGameObjectWithTag(name);
+        pc.weaponObject = GameObject.FindGameObjectWithTag(name);
 
         foreach (Transform weapons in weaponPar.transform)
             if (weapons.tag != name)
@@ -39,5 +39,7 @@ public class WeaponBehaviour : MonoBehaviour
 
         PlayerPrefs.SetString("weaponName", name);
         pc.weaponName = name;
+        pc.weaponStats = Resources.Load<Weapon>(name);
+        pc.applyStats();
     }
 }

@@ -11,11 +11,11 @@ public class PCombat : MonoBehaviour
     public PMove pm;
     public Transform mousePos;
     public Transform playerPos;
-    public GameObject weapon;
+    public GameObject weaponObject;
 
     [Header("Weapon")]
     public string weaponName;
-    public Weapon[] weapons = new Weapon[10];
+    public Weapon weaponStats;
 
     [Header("Atk Values")]
     public float atkRange;
@@ -25,31 +25,11 @@ public class PCombat : MonoBehaviour
 
     public LayerMask enemyLayers;
 
-    //[Header("Mouse Position")]
-    //[SerializeField]private Vector3 mousePos;
-
     private float nextAtkTime = 0f;
     private float orMoveSpeed;
     private float orRotSpeed;
     //private int count;
     //private int weaponType;
-
-    // cara biar banyak senjata
-    // senjata ntar di taro di tangan smua, tinggal di set active true/false
-    // set true/false berdasarkan data string weaponName
-    // animasi ntar ada smua di 1 controller (player animator) berdasarkan playerpref senjata
-
-    // data atk values bisa jg di simpan di class terpisah
-
-    public class Weapon
-    {
-        public string weaponName;
-        public Transform atkPos;
-        public float atkRange;
-        public int atkDamage;
-        public float atkRate;
-        public float atkDelay;
-    }
 
     void Start()
     {
@@ -64,6 +44,9 @@ public class PCombat : MonoBehaviour
 
         orMoveSpeed = pm.moveSpeed;
         orRotSpeed = pm.rotSpeed;
+
+        weaponStats = Resources.Load<Weapon>(weaponName);
+        applyStats();
     }
 
     // Update is called once per frame
@@ -132,5 +115,14 @@ public class PCombat : MonoBehaviour
         pm.moveSpeed = orMoveSpeed;
         pm.rotSpeed = orRotSpeed;
         pm.isDashing = false;
+    }
+
+    public void applyStats()
+    {
+        atkPos.localPosition = weaponStats.atkPos;
+        atkRange = weaponStats.atkRange;
+        atkDamage = weaponStats.atkDamage;
+        atkRate = weaponStats.atkRate;
+        atkDelay = weaponStats.atkDelay;
     }
 }

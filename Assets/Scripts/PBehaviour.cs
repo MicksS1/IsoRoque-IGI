@@ -5,7 +5,8 @@ using UnityEngine;
 public class PBehaviour : MonoBehaviour
 {
     [Header("Refs")]
-    GameObject player;
+    public HealthBar healthBar;
+    public GameObject player;
 
     public int maxHP = 100;
     private int currHP;
@@ -27,6 +28,9 @@ public class PBehaviour : MonoBehaviour
     public void PTakeDamage(int damage)
     {
         currHP = currHP - damage;
+        healthBar.setHP(currHP);
+
+        Debug.Log(damage);
 
         if (currHP <= 0)
         {
