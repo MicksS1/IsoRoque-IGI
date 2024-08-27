@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ECombat : MonoBehaviour
@@ -23,6 +24,9 @@ public class ECombat : MonoBehaviour
     public float atkRadE;
     public float atkDelayE;
 
+    [Header("Validations")]
+    public bool isBoss;
+
     public LayerMask playerLayer;
 
     private float nextAtkTime = 0f;
@@ -37,6 +41,9 @@ public class ECombat : MonoBehaviour
         eb = GetComponent<EBehaviour>();
         pb = GameObject.FindGameObjectWithTag("Player").GetComponent<PBehaviour>();
 
+        if (!eb.isMalware)
+            anim = GetComponent<Animator>();
+
         orSpeed = eb.speed;
         orRotSpeed = eb.rotSpeed;
     }
@@ -47,17 +54,48 @@ public class ECombat : MonoBehaviour
         difference = playerPos.position - pos.position;
         distance = difference.magnitude;
 
-        if (Time.time >= nextAtkTime)
+        if (Time.time >= nextAtkTime && !isBoss)
+        {
             if (distance < atkRadE)
             {
                 attack();
                 nextAtkTime = Time.time + 1f / atkRateE;
             }
+        }
+        else if (Time.time >= nextAtkTime && isBoss)
+        {
+            if (distance < atkRadE)
+            {
+                attackBoss('1'); // short range
+                nextAtkTime = Time.time + 1f / atkRateE;
+
+            }
+            else if (distance > atkRadE)
+            {
+                attackBoss('2'); // long range
+                nextAtkTime = Time.time + 1f / atkRateE;
+            }
+        }
     }
 
     public void attack()
     {
         anim.SetTrigger("atkE");
+        Invoke("attackHit", atkDelayE);
+
+        eb.speed = eb.speed * 0.05f;
+        eb.rotSpeed = eb.rotSpeed * 0.05f;
+        Invoke("resetSpeed", atkDelayE);
+    }
+
+    public void attackBoss(char type)
+    {
+        if (type == '1')
+            changeToShortAtk();
+        else if (type == '2')
+            changeToLongAtk();
+
+        anim.SetTrigger("atkE" + type);
         Invoke("attackHit", atkDelayE);
 
         eb.speed = eb.speed * 0.05f;
@@ -83,6 +121,17 @@ public class ECombat : MonoBehaviour
     {
         eb.speed = orSpeed;
         eb.rotSpeed = orRotSpeed;
+    }
+
+    public void changeToLongAtk()
+    {
+        // ganti stat utk long range atk (AOE), kecuali atkrade
+        // klo long range, atk rate hrs kecil
+    }
+
+    public void changeToShortAtk()
+    {
+        // ganti stat utk short range atk, kecuali atkrade
     }
 
     private void OnDrawGizmosSelected()

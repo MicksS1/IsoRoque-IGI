@@ -9,6 +9,7 @@ public class EBehaviour : MonoBehaviour
     public Transform enemyPos;
     public Transform playerPos;
     public HealthBar healthBar;
+    public Animator anim;
     //public Collider coll;
 
     [Header("Enemy Values")]
@@ -18,6 +19,9 @@ public class EBehaviour : MonoBehaviour
     public int dirDeg;
     public float rotSpeed;
 
+    [Header("Validation")]
+    public bool isMalware;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +30,9 @@ public class EBehaviour : MonoBehaviour
 
         enemyPos = GetComponent<Transform>();
         playerPos = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        //healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
+
+        if (!isMalware)
+            anim = GetComponent<Animator>();
 
         currHP = maxHP;
     }
@@ -52,6 +58,8 @@ public class EBehaviour : MonoBehaviour
             // kalau perlu rotation tambahan, value Quaternion.Euler tinggal di otak atik sumbu Y ny
             Vector3 isoDir = Quaternion.Euler(0, dirDeg, 0) * dirToPlayer;
 
+            if (!isMalware)
+                anim.SetTrigger("moveE");
             transform.position = Vector3.MoveTowards(transform.position, playerPos.position, speed);
 
             Quaternion targetRotation = Quaternion.LookRotation(isoDir, Vector3.up);
@@ -75,9 +83,9 @@ public class EBehaviour : MonoBehaviour
             Debug.Log("enemy dead!");
 
             //coll.enabled = false;
-            this.enabled = false;
 
             enemy.SetActive(false);
+            //this.enabled = false;
         }
     }
 }
