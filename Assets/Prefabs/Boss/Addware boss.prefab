@@ -1010,7 +1010,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2912206072926677772}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfaafe89a18e28d4d80bc8d7459b3eb6, type: 3}
   m_Name: 
@@ -1020,11 +1020,12 @@ MonoBehaviour:
   playerPos: {fileID: 0}
   healthBar: {fileID: 661693013300851057}
   anim: {fileID: 0}
-  maxHP: 100
-  speed: 0.06
+  maxHP: 300
+  speed: 0.05
   dirDeg: 0
   rotSpeed: 20
   isMalware: 0
+  isAdware: 1
 --- !u!114 &7668044422549119000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1040,13 +1041,13 @@ MonoBehaviour:
   anim: {fileID: 0}
   playerPos: {fileID: 0}
   pos: {fileID: 0}
-  atkPos: {fileID: 0}
+  atkPos: {fileID: 3929011042262201361}
   eb: {fileID: 0}
   pb: {fileID: 0}
   difference: {x: 0, y: 0, z: 0}
   distance: 0
   atkRangeE: 1
-  atkDamageE: 10
+  atkDamageE: 25
   atkRateE: 0.5
   atkRadE: 3
   atkDelayE: 3

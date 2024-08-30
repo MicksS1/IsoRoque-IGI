@@ -16,6 +16,7 @@ public class ECombat : MonoBehaviour
     [Header("Position Values")]
     [SerializeField] private Vector3 difference;
     [SerializeField] private float distance;
+    private float activateDistance = 20f;
 
     [Header("Atk Values")]
     public float atkRangeE;
@@ -54,6 +55,11 @@ public class ECombat : MonoBehaviour
         difference = playerPos.position - pos.position;
         distance = difference.magnitude;
 
+        if (distance < activateDistance)
+            eb.enabled = true;
+        else
+            eb.enabled = false;
+
         if (Time.time >= nextAtkTime && !isBoss)
         {
             if (distance < atkRadE)
@@ -64,15 +70,20 @@ public class ECombat : MonoBehaviour
         }
         else if (Time.time >= nextAtkTime && isBoss)
         {
-            if (distance < atkRadE)
+            if (distance < atkRadE && !eb.isAdware)
             {
                 attackBoss('1'); // short range
                 nextAtkTime = Time.time + 1f / atkRateE;
 
             }
-            else if (distance > atkRadE)
+            else if (distance > atkRadE && !eb.isAdware)
             {
                 attackBoss('2'); // long range
+                nextAtkTime = Time.time + 1f / atkRateE;
+            }
+            else if (distance < atkRadE && eb.isAdware)
+            {
+                attackBoss('1'); // short range
                 nextAtkTime = Time.time + 1f / atkRateE;
             }
         }

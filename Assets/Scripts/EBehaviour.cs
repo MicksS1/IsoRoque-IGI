@@ -19,8 +19,9 @@ public class EBehaviour : MonoBehaviour
     public int dirDeg;
     public float rotSpeed;
 
-    [Header("Validation")]
+    [Header("Validations")]
     public bool isMalware;
+    public bool isAdware;
 
     // Start is called before the first frame update
     void Start()
