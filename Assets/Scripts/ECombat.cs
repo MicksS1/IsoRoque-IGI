@@ -24,9 +24,11 @@ public class ECombat : MonoBehaviour
     public float atkRateE;
     public float atkRadE;
     public float atkDelayE;
+    public float speedResetDelayE;
 
     [Header("Validations")]
     public bool isBoss;
+    public bool isAttacking;
 
     public LayerMask playerLayer;
 
@@ -47,6 +49,7 @@ public class ECombat : MonoBehaviour
 
         orSpeed = eb.speed;
         orRotSpeed = eb.rotSpeed;
+        isAttacking = false;
     }
 
     // Update is called once per frame
@@ -60,7 +63,7 @@ public class ECombat : MonoBehaviour
         else
             eb.enabled = false;
 
-        if (Time.time >= nextAtkTime && !isBoss)
+        if (Time.time >= nextAtkTime && !isBoss && !isAttacking)
         {
             if (distance < atkRadE)
             {
@@ -68,7 +71,7 @@ public class ECombat : MonoBehaviour
                 nextAtkTime = Time.time + 1f / atkRateE;
             }
         }
-        else if (Time.time >= nextAtkTime && isBoss)
+        else if (Time.time >= nextAtkTime && isBoss && !isAttacking)
         {
             if (distance < atkRadE && !eb.isAdware)
             {
@@ -91,16 +94,20 @@ public class ECombat : MonoBehaviour
 
     public void attack()
     {
+        isAttacking = true;
+
         anim.SetTrigger("atkE");
         Invoke("attackHit", atkDelayE);
 
         eb.speed = eb.speed * 0.05f;
         eb.rotSpeed = eb.rotSpeed * 0.05f;
-        Invoke("resetSpeed", atkDelayE);
+        Invoke("resetSpeed", atkDelayE + speedResetDelayE);
     }
 
     public void attackBoss(char type)
     {
+        isAttacking = true;
+
         if (type == '1')
             changeToShortAtk();
         else if (type == '2')
@@ -111,7 +118,7 @@ public class ECombat : MonoBehaviour
 
         eb.speed = eb.speed * 0.05f;
         eb.rotSpeed = eb.rotSpeed * 0.05f;
-        Invoke("resetSpeed", atkDelayE);
+        Invoke("resetSpeed", atkDelayE + speedResetDelayE);
     }
 
     public void attackHit()
@@ -132,6 +139,7 @@ public class ECombat : MonoBehaviour
     {
         eb.speed = orSpeed;
         eb.rotSpeed = orRotSpeed;
+        isAttacking = false;
     }
 
     public void changeToLongAtk()

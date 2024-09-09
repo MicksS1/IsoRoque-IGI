@@ -7,6 +7,7 @@ public class PBehaviour : MonoBehaviour
     [Header("Refs")]
     public HealthBar healthBar;
     public GameObject player;
+    public Material dissolveMaterial;
 
     public int maxHP = 100;
     private int currHP;
@@ -15,7 +16,6 @@ public class PBehaviour : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-
         currHP = maxHP;
     }
 
@@ -34,8 +34,34 @@ public class PBehaviour : MonoBehaviour
 
         if (currHP <= 0)
         {
-            // play dead anim for player
-            player.SetActive(false);
+            foreach (SkinnedMeshRenderer smr in player.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                smr.material = dissolveMaterial;
+                StartCoroutine(dissolve(smr.material));
+            }
+
+            Invoke(nameof(disablePlayer), 1f);
         }
+    }
+
+    IEnumerator dissolve(Material mat)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < 1f)
+        {
+            Debug.Log("jalan");
+            elapsed += Time.deltaTime;
+            float dissolveAmount = Mathf.Clamp01(elapsed / 1f);
+            mat.SetFloat("_Dissolve", dissolveAmount);
+            yield return null;
+        }
+
+        mat.SetFloat("_Dissolve", 1f);
+    }
+
+    void disablePlayer()
+    {
+        player.SetActive(false);
     }
 }

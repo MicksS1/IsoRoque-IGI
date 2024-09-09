@@ -12,6 +12,8 @@ TagManager:
   - Machete
   - Katana
   - Weapons
+  - EnemyObjects
+  - Hammer
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - UI
   - Enemy
   - Ground
-  - 
+  - camera
   - 
   - 
   - 
