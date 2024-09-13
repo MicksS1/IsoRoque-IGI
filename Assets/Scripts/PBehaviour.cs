@@ -46,15 +46,13 @@ public class PBehaviour : MonoBehaviour
 
     IEnumerator dissolve(Material mat)
     {
-        float elapsed = 0f;
+        float i = 0f;
 
-        while (elapsed < 1f)
+        while (i < 1f)
         {
-            Debug.Log("jalan");
-            elapsed += Time.deltaTime;
-            float dissolveAmount = Mathf.Clamp01(elapsed / 1f);
-            mat.SetFloat("_Dissolve", dissolveAmount);
-            yield return null;
+            mat.SetFloat("_Dissolve", i);
+            i = i + 0.01f;
+            yield return new WaitForSeconds(0.01f);
         }
 
         mat.SetFloat("_Dissolve", 1f);

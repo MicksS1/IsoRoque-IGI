@@ -8,6 +8,7 @@ public class PMove : MonoBehaviour
     [Header("Refs")]
     public Rigidbody player;
     public Animator anim;
+    public TrailRenderer trail;
 
     [Header("Movement")]
     public float moveSpeed;
@@ -40,6 +41,9 @@ public class PMove : MonoBehaviour
         CD = false;
 
         anim = GetComponent<Animator>();
+        trail = GameObject.FindGameObjectWithTag("TrailPoint").GetComponent<TrailRenderer>();
+
+        trail.enabled = false;
     }
 
     // Update is called once per frame
@@ -55,12 +59,15 @@ public class PMove : MonoBehaviour
         // dash
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && !CD)
         {
+            trail.enabled = true;
+            trail.time = 0.5f;
+
             isDashing = true;
             moveSpeed = moveSpeed * dashSpeed;
-            Invoke("dashReset", 0.2f);
+            Invoke(nameof(dashReset), 0.2f);
 
             CD = true;
-            Invoke("coolDown", dashCD + 0.2f);
+            Invoke(nameof(coolDown), dashCD + 0.2f);
         }
 
         speedX = player.velocity.x;
@@ -96,10 +103,22 @@ public class PMove : MonoBehaviour
     {
         moveSpeed = moveSpeed / dashSpeed;
         isDashing = false;
+        StartCoroutine(trailReduce());
     }
 
     private void coolDown()
     {
         CD = false;
+    }
+
+    IEnumerator trailReduce()
+    {
+        while (trail.time > 0)
+        {
+            trail.time = trail.time - 0.01f;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        trail.time = 0f;
     }
  }
